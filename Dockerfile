@@ -24,8 +24,8 @@ LABEL maintainer="Philipp Reyes <philipp@example.com>" \
       version="1.0" \
       description="Backend Ventas - Spring Boot REST API"
 
-# Instalar dumb-init y ca-certificates
-RUN apk add --no-cache dumb-init ca-certificates
+# Instalar tini y ca-certificates
+RUN apk add --no-cache tini ca-certificates
 
 # Variables de entorno
 ENV APP_HOME=/app \
@@ -54,6 +54,6 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
     CMD wget --quiet --tries=1 --spider http://localhost:8080/actuator/health || exit 1
 
-# Usar dumb-init para ejecutar la aplicación
-ENTRYPOINT ["/usr/sbin/dumb-init", "--"]
+# Usar tini para ejecutar la aplicación
+ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["java", "-jar", "app.jar"]
