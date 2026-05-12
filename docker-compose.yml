@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  backend-ventas:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend-ventas
+    ports:
+      - "8081:8080"
+    environment:
+      - JAVA_OPTS=-Xmx512m -Xms256m -XX:+UseG1GC
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_APPLICATION_NAME=backend-ventas
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    networks:
+      - despacho-network
+    labels:
+      - "com.despacho.description=Backend Ventas - Spring Boot REST API"
+      - "com.despacho.version=1.0"
+    volumes:
+      - ./logs:/app/logs
+
+networks:
+  despacho-network:
+    driver: bridge
