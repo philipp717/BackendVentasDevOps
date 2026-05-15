@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM maven:3.9-eclipse-temurin-21-alpine AS builder
+FROM maven:3.9-eclipse-temurin-17-alpine AS builder
 
 # Establecer directorio de trabajo
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests -Dmaven.wagon.http.ssl.insecure=true
 
 # Stage 2: Runtime
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:17-jre-alpine
 
 # Labels
 LABEL maintainer="Philipp Reyes <philipp@example.com>" \
